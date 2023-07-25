@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -34,10 +35,31 @@ class UserCrudController extends AbstractCrudController
             ->setFormType(PasswordType::class)
             ->onlyOnForms();
 
+        if ($pageName === Crud::PAGE_EDIT){
+            $passwordField
+            ->setLabel('Password (Ne pas modifier)');
+        }
+
         if ($pageName === Crud::PAGE_NEW) {
             $passwordField->setFormTypeOption('empty_data', '');
         } else {
-            $passwordField->setFormTypeOption('required', false);
+            $passwordField->setRequired(false);
+        }
+
+        $rolesField = ChoiceField::new('roles')
+            ->setChoices([
+                'Utilisateur' => 'ROLE_USER',
+                'Administrateur' => 'ROLE_ADMIN',
+                'Super Administrateur' => 'ROLE_SUPERADMIN',
+            ])
+            ->allowMultipleChoices()
+            ->setRequired(true);
+
+        if (!$this->isGranted('ROLE_SUPERADMIN')) {
+            $rolesField
+            ->setChoices([
+                'Utilisateur' => 'ROLE_USER',
+                'Administrateur' => 'ROLE_ADMIN',]);
         }
 
         return [
@@ -45,8 +67,9 @@ class UserCrudController extends AbstractCrudController
             TextField::new('username'),
             EmailField::new('email'),
             $passwordField,
-            ArrayField::new('roles'),
+            $rolesField,
             DateTimeField::new('created_at')
+                ->hideWhenUpdating()
                 ->setFormat('dd/MM/yyyy HH:mm:ss')
                 ->setFormTypeOption('data', new \DateTimeImmutable())
         ];

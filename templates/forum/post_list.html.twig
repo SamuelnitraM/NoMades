@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - {{category.title}}{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    <h1>{{category.title}}</h1>
+    <button type="button" class="btn btn-primary my-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <i class="fa-solid fa-plus"></i> Créer un Post 
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Créer un post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                {% if app.user %}
+                    {{ form_start(form) }}
+                    {{ form_row(form.title) }}
+                    {{ form_row(form.description) }}
+                    {{ form_row(form.body) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+                {{ form_end(form) }}
+                {% else %}
+                    <p><a href="{{path('app_login')}}">Connectez vous</a> pour créer un post!</p>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                    </div>
+                    
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% for post in post %}
+    <div class="card my-2">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <a class="fs-4" href="{{path('app_post', {id: post.id})}}">{{post.title}}</a>  
+            {% if AnswerCount[post.id]|length > 0  %}
+            <div class="card-footer text-muted">{{ AnswerCount[post.id] }} réponse(s)</div>
+            {% endif %}
+        </div>
+        <div class="card-body" style="transform: rotate(0);">
+        <a class="stretched-link" href="{{path('app_post', {id: post.id})}}"></a>
+            <small class="card-title">{{post.description|join(' / ')}}</small>
+            <p class="card-text text-truncate">{{post.body}}</p>
+        </div>
+        <div class="card-footer">
+        <small class="justify-content-end">Crée le : {{post.createdat|date('d-m-Y')}} Par : <a href="{{path('app_profil', {id: post.idauthor})}}">{{ user[post.id] }}</a></small>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

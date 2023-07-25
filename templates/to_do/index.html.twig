@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ma todo liste{% endblock %}
+
+{% block body %}
+<div class="container">
+    {% if app.user %}
+        <h1>Ma Todo liste</h1>
+
+        <button type="button" class="btn btn-primary my-1" data-bs-toggle="modal" data-bs-target="#TitleModal">
+            <i class="fa-solid fa-plus"></i> Créer un nouveau projet
+        </button>
+
+        <!-- Modal du titre du projet -->
+        <div class="modal fade" id="TitleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Créer un projet</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_start(TitleForm) }}
+                        {{ form_row(TitleForm.title) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                    {{ form_end(TitleForm) }}
+                </div>
+            </div>
+        </div>
+
+        {% for Title in TodoTitle %}
+            <div class="card my-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>{{ Title.title }}</div>
+                    <div>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#TaskModal{{ Title.id }}">
+                            <i class="fa-solid fa-plus"></i> Créer une nouvelle tâche
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal des tâches de projet-->
+            <div class="modal fade" id="TaskModal{{ Title.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Créer un projet</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(TaskForm) }}
+                            {{ form_row(TaskForm.body) }}
+                            {{ form_widget(TaskForm.id_title, { 'attr': {'value': Title.id } }) }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                        {{ form_end(TaskForm) }}
+                    </div>
+                </div>
+            </div>
+
+            {% for todo in todo %}
+                <div class="card my-3">
+                    <div>{{ todo.body }}</div>
+                </div>
+            {% endfor %}
+
+        {% endfor %}
+
+        {% else %}
+        <p>Connectez vous pour accéder à votre TodoListe</p>
+        {% endif %}
+</div>
+{% endblock %}

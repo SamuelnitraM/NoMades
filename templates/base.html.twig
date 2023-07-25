@@ -16,10 +16,10 @@
     <div class="container">
       <div class="row">
 <div class="col-sm-4 offset-md-1 py-4 text-center">
-          <h4>Contact</h4>
+          <h4>TEST</h4>
           <ul class="list-unstyled">
-            <li><a href="#" class="text-white">Follow on Twitter</a></li>
-            <li><a href="#" class="text-white">Like on Facebook</a></li>
+            <li><a href="{{ path('app_forum')}}" class="text-white">Forum</a></li>
+            <li><a href="{{ path('app_to_do')}}" class="text-white">ToDo</a></li>
             <li><a href="#" class="text-white">Email me</a></li>
           </ul>
         </div>
@@ -28,7 +28,7 @@
           <ul class="list-unstyled">
             {% if app.user %}
             <li><a href="{{path('app_profil', {'id': app.user.id})}}" class="text-white">Mon compte</a></li>
-            <li><a href="#" class="text-white">Email me</a></li>
+            <li><a href="{{ path('app_to_do')}}" class="text-white">ToDo liste</a></li>
             <li><a href="{{path('app_logout')}}" class="text-white">Déconnexion</a></li>
             {% else %}
             <li><a href="{{path('app_login')}}" class="text-white">Connexion</a></li>

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+    <h1>Forum</h1>
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>{{ post.title }}</h5>
+            {{ post.description|join(' / ') }}
+        </div>
+        <div class="card-body">
+            <p>{{ post.body }}</p>
+        </div>
+    </div>
+    <h3>Reponses</h3>
+
+    {% if answers|length > 0 %}
+        {% for answer in answers %}
+            <div class="card mt-3">
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>{{ answer.body }}</p>
+                        <footer class="blockquote-footer"><small>Répondu le {{ answer.createdAt|date('d-m-Y') }} Par : <a href="{{path('app_profil', {id: post.idauthor})}}">{{ answerAuthor[answer.id] }}</a></small></footer>
+                    </blockquote>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Aucune réponse enregistrée.</p>
+    {% endif %}
+
+    {% if app.user %}
+    <div class="my-4">
+        {{ form_start(form) }}
+        {{ form_row(form.body) }}
+        <button type="submit" class="btn btn-primary mt-3">Répondre</button>
+        {{ form_end(form) }}
+    </div>
+    {% else %}
+        <p>Vous devez <a href="{{ path('app_login')}}">vous connecter</a> pour pouvoir répondre</p>
+    {% endif %}
+</div>
+{% endblock %}

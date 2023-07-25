@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ForumController!{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="my-4 text-center">Forum</h1>
+
+    {% for category in category %}
+    <div class="card my-4">
+        <h5 class="card-header d-flex justify-content-between">
+          <a href="{{path('app_post_list', {id: category.id})}}">{{category.title}}</a> 
+          <small class="card-foter text-muted">{{ numPost[category.id] }} Post(s)</small>
+        </h5>
+        <div class="card-body">
+            <p class="card-text">{{category.description}}</p>
+            <a href="{{path('app_post_list', {id: category.id})}}" class="btn btn-primary">Voir</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

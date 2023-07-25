@@ -2,6 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\AnswerPost;
+use App\Entity\Category;
+use App\Entity\Post;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -45,6 +48,10 @@ class AdminDashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('User', 'fa fa-user', User::class);
+        yield MenuItem::section('Forum');
+        yield MenuItem::linkToCrud('Catégories','fa fa-list', Category::class);
+        yield MenuItem::linkToCrud('Posts','fa fa-comment', Post::class);
+        yield MenuItem::linkToCrud('Réponses Posts','fa fa-comments', AnswerPost::class);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }
